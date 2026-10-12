@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills 图解教程 - 零基础入门</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .mermaid {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .step {
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip {
+            background-color: #e8f8e8;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fef3e8;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin: 10px 0;
+        }
+        
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .command {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Skills 图解教程 - 零基础入门</h1>
+        
+        <p>欢迎来到 Skills 图解教程！本教程通过多张图表，帮助零基础的你快速理解 Skills 仓库的核心概念和使用方法。</p>
+        
+        <div class="toc">
+            <h3>教程目录</h3>
+            <ul>
+                <li><a href="#section1">1. 整体架构图 - 了解 Skills 的整体结构</a></li>
+                <li><a href="#section2">2. 工作流程图 - 掌握日常开发流程</a></li>
+                <li><a href="#section3">3. 安装步骤图 - 学习如何安装和设置</a></li>
+                <li><a href="#section4">4. 功能对比图 - 了解各个技能的用途</a></li>
+                <li><a href="#section5">5. 核心概念图 - 理解关键概念和关系</a></li>
+            </ul>
+        </div>
+        
+        <h2 id="section1">1. 整体架构图</h2>
+        
+        <p>Skills 仓库分为两大类技能，每个类别又分为用户调用技能和模型调用技能。</p>
+        
+        <div class="mermaid">
+        graph TB
+            subgraph "用户层"
+                User[用户/开发者]
+            end
+            
+            subgraph "Skills 分类"
+                direction TB
+                Engineering[工程技能<br/>Engineering Skills]
+                Productivity[生产力技能<br/>Productivity Skills]
+            end
+            
+            subgraph "工程技能细分"
+                direction LR
+                UserInvoked1[用户调用技能]
+                ModelInvoked1[模型调用技能]
+            end
+            
+            subgraph "生产力技能细分"
+                direction LR
+                UserInvoked2[用户调用技能]
+                ModelInvoked2[模型调用技能]
+            end
+            
+            subgraph "核心概念"
+                IssueTracker[问题追踪器<br/>Issue Tracker]
+                Issues[问题<br/>Issues]
+                TriageRoles[分类角色<br/>Triage Roles]
+                SharedLanguage[共享语言<br/>Shared Language]
+            end
+            
+            User --> Engineering
+            User --> Productivity
+            
+            Engineering --> UserInvoked1
+            Engineering --> ModelInvoked1
+            Productivity --> UserInvoked2
+            Productivity --> ModelInvoked2
+            
+            UserInvoked1 --> IssueTracker
+            UserInvoked1 --> Issues
+            UserInvoked1 --> TriageRoles
+            UserInvoked1 --> SharedLanguage
+            
+            ModelInvoked1 --> IssueTracker
+            ModelInvoked1 --> Issues
+            ModelInvoked1 --> TriageRoles
+            ModelInvoked1 --> SharedLanguage
+            
+            UserInvoked2 --> IssueTracker
+            UserInvoked2 --> Issues
+            UserInvoked2 --> TriageRoles
+            UserInvoked2 --> SharedLanguage
+            
+            ModelInvoked2 --> IssueTracker
+            ModelInvoked2 --> Issues
+            ModelInvoked2 --> TriageRoles
+            ModelInvoked2 --> SharedLanguage
+        </div>
+        
+        <div class="tip">
+            <strong>图表说明</strong>：
+            <ul>
+                <li><strong>工程技能</strong>：专注于代码开发工作</li>
+                <li><strong>生产力技能</strong>：通用工作流程工具</li>
+                <li><strong>用户调用技能</strong>：只能由用户通过命令触发</li>
+                <li><strong>模型调用技能</strong>：可以由用户或 AI 模型自动调用</li>
+            </ul>
+        </div>
+        
+        <h2 id="section2">2. 工作流程图</h2>
+        
+        <p>了解日常开发中的典型工作流程，从需求收集到代码审查。</p>
+        
+        <div class="mermaid">
+        flowchart TD
+            Start([开始]) --> Install[安装 Skills]
+            Install --> Setup[运行 /setup-matt-pocock-skills]
+            Setup --> Config[配置问题追踪器<br/>和分类标签]
+            Config --> Ready([准备就绪])
+            
+            Ready --> Decision{需要做什么?}
+            
+            Decision -->|新功能开发| Grill[使用 /grill-me<br/>或 /grill-with-docs]
+            Decision -->|修复 Bug| TDD[使用 /tdd]
+            Decision -->|代码审查| Review[使用 /code-review]
+            Decision -->|架构改进| Architecture[使用 /improve-codebase-architecture]
+            
+            Grill --> Spec[创建规格说明<br/>/to-spec]
+            Spec --> Tickets[分解为问题<br/>/to-tickets]
+            Tickets --> Implement[实现功能<br/>/implement]
+            Implement --> Review
+            
+            TDD --> Red[编写失败测试]
+            Red --> Green[编写代码通过测试]
+            Green --> Refactor[重构代码]
+            Refactor --> Review
+            
+            Review --> Done([完成])
+            
+            Architecture --> Survey[扫描代码库]
+            Survey --> Candidates[识别改进候选]
+            Candidates --> Grill
+        </div>
+        
+        <h3>典型工作流程</h3>
+        
+        <div class="step">
+            <strong>新功能开发流程</strong>：
+            <ol>
+                <li><code>/grill-with-docs</code> - 深入访谈并创建文档</li>
+                <li><code>/to-spec</code> - 将对话转化为规格说明</li>
+                <li><code>/to-tickets</code> - 将规格分解为问题</li>
+                <li><code>/implement</code> - 实现功能</li>
+                <li><code>/code-review</code> - 代码审查</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <strong>测试驱动开发 (TDD) 流程</strong>：
+            <ol>
+                <li><strong>红灯</strong>：编写一个失败的测试</li>
+                <li><strong>绿灯</strong>：编写代码使测试通过</li>
+                <li><strong>重构</strong>：优化代码结构</li>
+            </ol>
+        </div>
+        
+        <h2 id="section3">3. 安装步骤图</h2>
+        
+        <p>学习三种不同的安装方法，选择最适合你的方式。</p>
+        
+        <div class="mermaid">
+        flowchart LR
+            subgraph "方法1: Claude Code 插件"
+                direction TB
+                A1[打开 Claude Code] --> A2[运行命令:<br/>claude plugins install<br/>mattpocock-skills]
+                A2 --> A3[插件自动安装]
+                A3 --> A4[运行 /setup-matt-pocock-skills]
+                A4 --> A5[配置完成]
+            end
+            
+            subgraph "方法2: npx skills"
+                direction TB
+                B1[打开终端] --> B2[运行命令:<br/>npx skills@latest add<br/>mattpocock/skills]
+                B2 --> B3[选择要安装的技能]
+                B3 --> B4[运行 /setup-matt-pocock-skills]
+                B4 --> B5[配置完成]
+            end
+            
+            subgraph "方法3: 手动安装"
+                direction TB
+                C1[克隆仓库:<br/>git clone<br/>mattpocock/skills]
+                C1 --> C2[复制技能文件<br/>到项目目录]
+                C2 --> C3[运行 /setup-matt-pocock-skills]
+                C3 --> C4[配置完成]
+            end
+        </div>
+        
+        <h3>安装方法对比</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>方法</th>
+                    <th>优点</th>
+                    <th>缺点</th>
+                    <th>推荐指数</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Claude Code 插件</strong></td>
+                    <td>最简单快捷，自动更新</td>
+                    <td>仅限 Claude Code</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td><strong>npx skills</strong></td>
+                    <td>可选择性安装，支持多种代理</td>
+                    <td>需要手动选择技能</td>
+                    <td>⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td><strong>手动安装</strong></td>
+                    <td>完全控制，可以修改</td>
+                    <td>复杂，需要手动更新</td>
+                    <td>⭐⭐⭐</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="command">
+            # 推荐安装方式<br>
+            claude plugins install mattpocock-skills
+        </div>
+        
+        <h2 id="section4">4. 功能对比图</h2>
+        
+        <p>了解各个技能的用途和使用场景，选择适合你需求的技能。</p>
+        
+        <div class="mermaid">
+        graph TB
+            subgraph "工程技能 (Engineering Skills)"
+                direction TB
+                
+                subgraph "用户调用技能"
+                    E1[ask-matt<br/>询问适合的技能]
+                    E2[grill-with-docs<br/>深入访谈 + 文档]
+                    E3[triage<br/>问题分类]
+                    E4[improve-codebase-architecture<br/>架构改进]
+                    E5[setup-matt-pocock-skills<br/>初始设置]
+                    E6[to-spec<br/>创建规格说明]
+                    E7[to-tickets<br/>分解为问题]
+                    E8[implement<br/>实现功能]
+                    E9[wayfinder<br/>规划大型任务]
+                end
+                
+                subgraph "模型调用技能"
+                    E10[prototype<br/>原型设计]
+                    E11[diagnosing-bugs<br/>诊断 Bug]
+                    E12[research<br/>技术研究]
+                    E13[tdd<br/>测试驱动开发]
+                    E14[domain-modeling<br/>领域建模]
+                    E15[codebase-design<br/>代码库设计]
+                    E16[code-review<br/>代码审查]
+                    E17[resolving-merge-conflicts<br/>解决合并冲突]
+                    E18[wizard<br/>生成向导]
+                end
+            end
+            
+            subgraph "生产力技能 (Productivity Skills)"
+                direction TB
+                
+                subgraph "用户调用技能"
+                    P1[grill-me<br/>深入访谈]
+                    P2[handoff<br/>交接文档]
+                    P3[teach<br/>教学功能]
+                    P4[to-questionnaire<br/>创建问卷]
+                    P5[wait-what<br/>澄清误解]
+                end
+                
+                subgraph "模型调用技能"
+                    P6[grilling<br/>访谈原语]
+                    P7[writing-for-agents<br/>为代理写作]
+                end
+            end
+        </div>
+        
+        <h3>技能选择指南</h3>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>任务类型</th>
+                    <th>推荐技能</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>新功能开发</strong></td>
+                    <td><code>/grill-with-docs</code> → <code>/to-spec</code> → <code>/to-tickets</code> → <code>/implement</code> → <code>/code-review</code></td>
+                    <td>完整的功能开发流程</td>
+                </tr>
+                <tr>
+                    <td><strong>Bug 修复</strong></td>
+                    <td><code>/diagnosing-bugs</code> 或 <code>/tdd</code></td>
+                    <td>诊断和修复问题</td>
+                </tr>
+                <tr>
+                    <td><strong>架构改进</strong></td>
+                    <td><code>/improve-codebase-architecture</code> → <code>/grill-me</code> → <code>/implement</code></td>
+                    <td>代码库优化</td>
+                </tr>
+                <tr>
+                    <td><strong>学习新技能</strong></td>
+                    <td><code>/teach</code></td>
+                    <td>系统化学习</td>
+                </tr>
+                <tr>
+                    <td><strong>技术研究</strong></td>
+                    <td><code>/research</code></td>
+                    <td>深入调查问题</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2 id="section5">5. 核心概念图</h2>
+        
+        <p>理解 Skills 中的关键概念及其相互关系。</p>
+        
+        <div class="mermaid">
+        graph TB
+            subgraph "核心概念"
+                IssueTracker[问题追踪器<br/>Issue Tracker]
+                Issues[问题<br/>Issues]
+                TriageRoles[分类角色<br/>Triage Roles]
+                SharedLanguage[共享语言<br/>Shared Language]
+                DecisionTicket[决策工单<br/>Decision Ticket]
+            end
+            
+            subgraph "问题追踪器类型"
+                GitHub[GitHub Issues]
+                Linear[Linear]
+                Local[本地文件<br/>.scratch/]
+            end
+            
+            subgraph "分类角色示例"
+                NeedsTriage[needs-triage<br/>需要分类]
+                ReadyForAFK[ready-for-afk<br/>可以开始]
+                InProgress[in-progress<br/>进行中]
+                Done[done<br/>完成]
+            end
+            
+            IssueTracker --> GitHub
+            IssueTracker --> Linear
+            IssueTracker --> Local
+            
+            TriageRoles --> NeedsTriage
+            TriageRoles --> ReadyForAFK
+            TriageRoles --> InProgress
+            TriageRoles --> Done
+            
+            Issues --> DecisionTicket
+        </div>
+        
+        <h3>核心概念详解</h3>
+        
+        <div class="step">
+            <strong>问题追踪器 (Issue Tracker)</strong>：
+            <ul>
+                <li>管理项目问题的工具</li>
+                <li>支持 GitHub Issues、Linear 或本地文件</li>
+                <li>用于存储和管理问题，跟踪工作进度</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <strong>问题 (Issues)</strong>：
+            <ul>
+                <li>被追踪的工作单元</li>
+                <li>可以是 Bug、Task、Spec 或 Slice</li>
+                <li>是 Skills 工作流的核心</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <strong>分类角色 (Triage Roles)</strong>：
+            <ul>
+                <li>问题的状态标签</li>
+                <li>常见角色：<code>needs-triage</code>、<code>ready-for-afk</code>、<code>in-progress</code>、<code>done</code></li>
+                <li>用于管理工作流程</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <strong>共享语言 (Shared Language)</strong>：
+            <ul>
+                <li>项目术语表</li>
+                <li>帮助 AI 理解项目上下文</li>
+                <li>减少沟通成本，提高代码质量</li>
+            </ul>
+        </div>
+        
+        <h2>快速开始</h2>
+        
+        <div class="mermaid">
+        flowchart LR
+            A[安装 Skills] --> B[运行设置命令]
+            B --> C[选择问题追踪器]
+            C --> D[配置分类标签]
+            D --> E[开始使用]
+            
+            E --> F[尝试 /grill-me]
+            E --> G[尝试 /tdd]
+            E --> H[尝试 /code-review]
+        </div>
+        
+        <div class="command">
+            # 1. 安装 Skills<br>
+            claude plugins install mattpocock-skills<br><br>
+            # 2. 运行设置命令<br>
+            /setup-matt-pocock-skills<br><br>
+            # 3. 开始使用<br>
+            /grill-me
+        </div>
+        
+        <h2>学习建议</h2>
+        
+        <div class="tip">
+            <strong>初学者路径</strong>：
+            <ol>
+                <li>先阅读 <strong>整体架构图</strong>，了解全貌</li>
+                <li>学习 <strong>安装步骤图</strong>，完成安装</li>
+                <li>查看 <strong>核心概念图</strong>，理解关键概念</li>
+                <li>尝试 <strong>工作流程图</strong> 中的简单流程</li>
+            </ol>
+        </div>
+        
+        <div class="warning">
+            <strong>注意事项</strong>：
+            <ul>
+                <li>不要一次性安装所有技能，从核心技能开始</li>
+                <li>每个技能都有详细的文档，遇到问题先查看文档</li>
+                <li>实践是最好的学习方式，多尝试不同的技能组合</li>
+            </ul>
+        </div>
+        
+        <h2>更多资源</h2>
+        
+        <ul>
+            <li><strong>官方仓库</strong>：https://github.com/mattpocock/skills</li>
+            <li><strong>官方网站</strong>：https://skills.sh</li>
+            <li><strong>文档</strong>：https://skills.sh/mattpocock/skills</li>
+        </ul>
+        
+        <footer>
+            <p>本教程基于 Skills 仓库的 README.md 和 CONTEXT.md 文件创建</p>
+            <p>如有疑问，建议直接阅读原始文档</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: { 
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
