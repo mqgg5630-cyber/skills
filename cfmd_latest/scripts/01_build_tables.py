@@ -262,7 +262,7 @@ for cat in ORDER:
         "食品新种SGB(ufSGB)": sub[sub["SGB类型"] == "食品中新种(ufSGB)"]["SGB_id"].nunique(),
         "属数": prok["属"].nunique(),
         "已定名种数": prok[prok["物种是否注释到种"] == "已定名种"]["物种"].nunique(),
-        "每样品平均MAG数": round(len(sub) / max(len(ms), 1), 2),
+        "每样品平均MAG数": round(len(sub) / max(allr[["dataset_id", "sample_id"]].drop_duplicates().shape[0], 1), 2),
         "优势属Top3": " / ".join(f"{k}({v})" for k, v in prok["属"].value_counts().head(3).items()),
         "优势种Top3": " / ".join(f"{k}({v})" for k, v in
                                 prok[prok["物种是否注释到种"] == "已定名种"]["物种"].value_counts().head(3).items()),
@@ -293,7 +293,7 @@ tot = {
     "食品新种SGB(ufSGB)": ferm[ferm["SGB类型"] == "食品中新种(ufSGB)"]["SGB_id"].nunique(),
     "属数": ferm[ferm["superkingdom"] != "Eukaryota"]["属"].nunique(),
     "已定名种数": ferm[ferm["物种是否注释到种"] == "已定名种"]["物种"].nunique(),
-    "每样品平均MAG数": round(len(ferm) / len(F_meta), 2),
+    "每样品平均MAG数": round(len(ferm) / F_all[["dataset_id", "sample_id"]].drop_duplicates().shape[0], 2),
     "优势属Top3": " / ".join(f"{k}({v})" for k, v in
                             ferm[ferm["superkingdom"] != "Eukaryota"]["属"].value_counts().head(3).items()),
     "优势种Top3": " / ".join(f"{k}({v})" for k, v in
@@ -377,20 +377,23 @@ rep["antiSMASH优先级"] = np.where(rep["物种"].isin(PROB_SPECIES_CORE) | (re
 rep.to_csv(f"{OUT}/09_antiSMASH输入MAG清单_每SGB代表株.csv", index=False, encoding="utf-8-sig")
 
 # ---------------------------------------------------------------- type 明细
+# 样品、数据集、国家一律按元数据统计（含没有 MAG 的样品），MAG 相关列按分析集与全部记录分别给出。
 trows = []
-for (cat, typ), d in ferm.groupby(["category", "type"]):
-    prok2 = d[d["superkingdom"] != "Eukaryota"]
+for (cat, typ), ms in F_meta.groupby(["category", "type"]):
+    d = ferm[(ferm["category"] == cat) & (ferm["type"] == typ)]
     dall = m[(m["category"] == cat) & (m["type"] == typ) & (m["fermented"] == "F")]
+    prok2 = d[d["superkingdom"] != "Eukaryota"]
     trows.append({
-        "发酵类别": d["发酵类别中文"].iloc[0], "食品类型": d["食品类型中文"].iloc[0], "type_code": typ,
-        "样品数": d[["dataset_id", "sample_id"]].drop_duplicates().shape[0],
-        "数据集数": d["dataset_id"].nunique(), "国家数": d["country"].nunique(),
+        "发酵类别": ms["发酵类别中文"].iloc[0], "食品类型": ms["食品类型中文"].iloc[0], "type_code": typ,
+        "样品数": len(ms),
+        "有关联MAG样品数": dall[["dataset_id", "sample_id"]].drop_duplicates().shape[0],
+        "数据集数": ms["dataset_name"].nunique(), "国家数": ms["country"].nunique(),
         "MAG记录数": len(dall), "MAG数": len(d), "HQ数": (d["质量等级"] == "高质量(HQ)").sum(),
         "SGB数": d["SGB_id"].nunique(), "属数": prok2["属"].nunique(),
         "优势种Top3": " / ".join(f"{k}({v})" for k, v in prok2["物种"].value_counts().head(3).items()),
-        "代表MAG": d.sort_values("completeness", ascending=False)["MAG_id"].iloc[0],
+        "代表MAG": d.sort_values("completeness", ascending=False)["MAG_id"].iloc[0] if len(d) else "",
     })
-pd.DataFrame(trows).sort_values("MAG数", ascending=False).to_csv(
+pd.DataFrame(trows).sort_values("样品数", ascending=False).to_csv(
     f"{OUT}/20_发酵类型明细_按type.csv", index=False, encoding="utf-8-sig")
 
 # ---------------------------------------------------------------- 与外部汇总表核对
