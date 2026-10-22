@@ -1,0 +1,7 @@
+# 结果表、图与打包文件体积较大，不进版本库；可用 scripts/ 下的脚本重新生成，
+# 或从 Google Drive 共享文件夹中的交付包 zip 获取。
+tables/*.csv
+文档/*.xlsx
+文档/*.zip
+figures/*.png
+scripts/__pycache__/
