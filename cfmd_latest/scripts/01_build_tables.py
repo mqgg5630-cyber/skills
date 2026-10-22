@@ -240,9 +240,19 @@ for cat in ORDER:
     ms = meta[(meta["category"] == cat) & (meta["fermented"] == "F")]
     prok = sub[sub["superkingdom"].isin(["Bacteria", "Archaea"])]
     euk = sub[sub["superkingdom"] == "Eukaryota"]
+    allr = m[(m["category"] == cat) & (m["fermented"] == "F")]
     rows.append({
         "发酵类别": CAT_CN.get(cat, cat), "category": cat,
         "样品数": len(ms), "数据集数": ms["dataset_name"].nunique(), "国家数": ms["country"].nunique(),
+        "有关联MAG样品数": allr[["dataset_id", "sample_id"]].drop_duplicates().shape[0],
+        "MAG记录数": len(allr),
+        "记录_原核": allr["superkingdom"].isin(["Bacteria", "Archaea"]).sum(),
+        "记录_真核": (allr["superkingdom"] == "Eukaryota").sum(),
+        "记录_未分类": (allr["superkingdom"].isna()).sum(),
+        "HQ_记录数": ((allr["completeness"] >= 90) & (allr["contamination"] < 5)).sum(),
+        "MQ_记录数": ((allr["completeness"] >= 50) & (allr["completeness"] < 90)
+                     & (allr["contamination"] < 5)).sum(),
+        "未纳入分析": len(allr) - len(sub),
         "MAG总数": len(sub), "原核MAG": len(prok), "真核MAG": len(euk),
         "高质量MAG(HQ)": (sub["质量等级"] == "高质量(HQ)").sum(),
         "中等质量MAG(MQ)": (sub["质量等级"] == "中等质量(MQ)").sum(),
@@ -259,9 +269,19 @@ for cat in ORDER:
     })
 summ = pd.DataFrame(rows)
 F_meta = meta[meta["fermented"] == "F"]
+F_all = m[m["fermented"] == "F"]
 tot = {
     "发酵类别": "合计", "category": "-",
     "样品数": len(F_meta), "数据集数": F_meta["dataset_name"].nunique(), "国家数": F_meta["country"].nunique(),
+    "有关联MAG样品数": F_all[["dataset_id", "sample_id"]].drop_duplicates().shape[0],
+    "MAG记录数": len(F_all),
+    "记录_原核": int(F_all["superkingdom"].isin(["Bacteria", "Archaea"]).sum()),
+    "记录_真核": int((F_all["superkingdom"] == "Eukaryota").sum()),
+    "记录_未分类": int(F_all["superkingdom"].isna().sum()),
+    "HQ_记录数": int(((F_all["completeness"] >= 90) & (F_all["contamination"] < 5)).sum()),
+    "MQ_记录数": int(((F_all["completeness"] >= 50) & (F_all["completeness"] < 90)
+                     & (F_all["contamination"] < 5)).sum()),
+    "未纳入分析": len(F_all) - len(ferm),
     "MAG总数": len(ferm),
     "原核MAG": len(ferm[ferm["superkingdom"].isin(["Bacteria", "Archaea"])]),
     "真核MAG": len(ferm[ferm["superkingdom"] == "Eukaryota"]),
@@ -360,17 +380,55 @@ rep.to_csv(f"{OUT}/09_antiSMASH输入MAG清单_每SGB代表株.csv", index=False
 trows = []
 for (cat, typ), d in ferm.groupby(["category", "type"]):
     prok2 = d[d["superkingdom"] != "Eukaryota"]
+    dall = m[(m["category"] == cat) & (m["type"] == typ) & (m["fermented"] == "F")]
     trows.append({
         "发酵类别": d["发酵类别中文"].iloc[0], "食品类型": d["食品类型中文"].iloc[0], "type_code": typ,
         "样品数": d[["dataset_id", "sample_id"]].drop_duplicates().shape[0],
         "数据集数": d["dataset_id"].nunique(), "国家数": d["country"].nunique(),
-        "MAG数": len(d), "HQ数": (d["质量等级"] == "高质量(HQ)").sum(),
+        "MAG记录数": len(dall), "MAG数": len(d), "HQ数": (d["质量等级"] == "高质量(HQ)").sum(),
         "SGB数": d["SGB_id"].nunique(), "属数": prok2["属"].nunique(),
         "优势种Top3": " / ".join(f"{k}({v})" for k, v in prok2["物种"].value_counts().head(3).items()),
         "代表MAG": d.sort_values("completeness", ascending=False)["MAG_id"].iloc[0],
     })
 pd.DataFrame(trows).sort_values("MAG数", ascending=False).to_csv(
     f"{OUT}/20_发酵类型明细_按type.csv", index=False, encoding="utf-8-sig")
+
+# ---------------------------------------------------------------- 与外部汇总表核对
+# 外部表（cFMD_全发酵食品统计汇总.xlsx）按"与 F 样品关联的 MAG 记录"统计，不做质量与 SGB 过滤。
+ext = {
+    "dairy": (2336, 11436, 10850), "fermented_beverages": (456, 2154, 1905),
+    "fermented_meat": (168, 618, 562), "fermented_grains": (83, 244, 233),
+    "alcohol": (48, 161, 89), "fermented_fruits_and_vegetables": (62, 166, 144),
+    "fermented_tubers_and_roots": (24, 123, 116), "fermented_legumes": (26, 190, 184),
+    "fermented_seeds": (65, 397, 361), "fermented_fish": (25, 233, 232),
+}
+srow = []
+for cat in ORDER:
+    r = summ[summ["category"] == cat].iloc[0]
+    es, er, eb = ext[cat]
+    srow.append({
+        "发酵类别": r["发酵类别"], "category": cat,
+        "外部表_样品": es, "本表_样品": int(r["样品数"]), "样品差": int(r["样品数"]) - es,
+        "外部表_MAG记录": er, "本表_MAG记录": int(r["MAG记录数"]), "记录差": int(r["MAG记录数"]) - er,
+        "外部表_Bacteria": eb, "本表_原核": int(r["记录_原核"]), "原核差": int(r["记录_原核"]) - eb,
+        "本表_纳入分析": int(r["MAG总数"]),
+        "剔除_原核": int(r["记录_原核"]) - int(r["原核MAG"]),
+        "剔除_真核": int(r["记录_真核"]) - int(r["真核MAG"]),
+        "剔除_未分类": int(r["记录_未分类"]),
+    })
+rec = pd.DataFrame(srow)
+rec.loc[len(rec)] = {"发酵类别": "合计", "category": "-",
+                     "外部表_样品": int(rec["外部表_样品"].sum()), "本表_样品": int(rec["本表_样品"].sum()),
+                     "样品差": int(rec["样品差"].sum()),
+                     "外部表_MAG记录": int(rec["外部表_MAG记录"].sum()),
+                     "本表_MAG记录": int(rec["本表_MAG记录"].sum()), "记录差": int(rec["记录差"].sum()),
+                     "外部表_Bacteria": int(rec["外部表_Bacteria"].sum()),
+                     "本表_原核": int(rec["本表_原核"].sum()), "原核差": int(rec["原核差"].sum()),
+                     "本表_纳入分析": int(rec["本表_纳入分析"].sum()),
+                     "剔除_原核": int(rec["剔除_原核"].sum()), "剔除_真核": int(rec["剔除_真核"].sum()),
+                     "剔除_未分类": int(rec["剔除_未分类"].sum())}
+rec.to_csv(f"{OUT}/23_与外部汇总表核对.csv", index=False, encoding="utf-8-sig")
+print(rec.tail(1).to_string(index=False))
 
 print("总 MAG", len(m), "纳入分析", len(A), "发酵", len(ferm))
 print(summ[["发酵类别", "样品数", "MAG总数", "原核MAG", "真核MAG", "SGB总数"]].to_string(index=False))
